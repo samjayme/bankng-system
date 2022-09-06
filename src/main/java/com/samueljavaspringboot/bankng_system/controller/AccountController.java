@@ -1,10 +1,12 @@
 package com.samueljavaspringboot.bankng_system.controller;
 
+import com.samueljavaspringboot.bankng_system.UserDto;
 import com.samueljavaspringboot.bankng_system.dto.AccountDTO;
 import com.samueljavaspringboot.bankng_system.dto.DepositForm;
 import com.samueljavaspringboot.bankng_system.dto.WithdrawalForm;
 import com.samueljavaspringboot.bankng_system.service.AccountService;
 import com.samueljavaspringboot.bankng_system.service.AccountServiceImp;
+import com.samueljavaspringboot.bankng_system.service.UserService;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import java.util.List;
 import javax.validation.Valid;
@@ -26,9 +28,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountController {
 
     private final AccountService  accountService;
+    private final UserService userService;
 
-    public AccountController(final AccountServiceImp accountServiceImp) {
+    public AccountController(final AccountServiceImp accountServiceImp, UserService userService) {
         this.accountService = accountServiceImp;
+        this.userService = userService;
+    }
+    @PostMapping("/signUp")
+    public ResponseEntity<Void> signUp (@RequestBody UserDto userDto){
+        userService.createUser(userDto);
+        return ResponseEntity.ok().build();
+
     }
     @PostMapping("/deposit")
     public ResponseEntity<Void> deposit(@RequestBody DepositForm depositForm){
